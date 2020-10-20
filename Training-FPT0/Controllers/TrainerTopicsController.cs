@@ -84,44 +84,43 @@ namespace Training_FPT0.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
+            var ttInDb = _context.TrainerTopics.SingleOrDefault(p => p.Id == id);
+            if (ttInDb == null)
             {
                 return HttpNotFound();
             }
-            var appUser = _context.TrainerTopics.Find(id);
-            if (appUser == null)
+            var viewModel = new TrainerTopicViewModel
             {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
+                TrainerTopic = ttInDb,
+                Topics = _context.Topics.ToList(),
 
+            };
+
+            return View(viewModel);
+        }
         [HttpPost]
         [Authorize(Roles = "TrainingStaff")]
         public ActionResult Edit(TrainerTopic trainerTopic)
         {
-            var trainertopicInDb = _context.TrainerTopics.Find(trainerTopic.Id);
 
-            if (trainertopicInDb == null)
+            if (!ModelState.IsValid)
             {
-                return View(trainerTopic);
+                return View();
             }
 
-            if (ModelState.IsValid)
+            var ttInDb = _context.TrainerTopics.SingleOrDefault(p => p.Id == trainerTopic.Id);
+            if (ttInDb == null)
             {
-                trainertopicInDb.TrainerId = trainerTopic.TrainerId;
-                trainertopicInDb.TopicId = trainerTopic.TopicId;
+                return HttpNotFound();
+            }
+            ttInDb.TopicId = trainerTopic.TopicId;
 
-                _context.TrainerTopics.AddOrUpdate(trainerTopic);
                 _context.SaveChanges();
 
                 return RedirectToAction("Index", "TrainerTopics");
             }
-            return View(trainerTopic);
-
-        }
 
         [Authorize(Roles = "TrainingStaff")]
         public ActionResult Delete(int id)

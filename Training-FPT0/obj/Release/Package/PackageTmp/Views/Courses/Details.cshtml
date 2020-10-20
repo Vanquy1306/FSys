@@ -1,0 +1,35 @@
+﻿﻿@model Training_FPT0.Models.Course
+@{ ViewBag.Title = "Details"; }
+
+<h2>Edit</h2>
+
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+@using (Html.BeginForm("Details", "Courses", FormMethod.Post))
+{
+@Html.HiddenFor(u => u.Id)
+                <div class="form-horizontal">
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>@Html.DisplayNameFor(u => u.Name)</dt>
+                        <dd>
+                            @Html.DisplayFor(u => u.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(u => u.CategoryId)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(u => u.Category.Name)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(u => u.TopicId)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(u => u.Topic.Name)
+                        </dd>
+                    </dl>
+                </div>}
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

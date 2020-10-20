@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Wellcome To FPT Training</h1>
+    <h2>
+        @Html.Partial("_LoginPartial")
+    </h2>
+
+</div>
+<div class="row">
+    <div class="col-md-4">
+        @if (Request.IsAuthenticated && User.IsInRole("Trainee"))
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "TraineeCourses")'" class="btn btn-primary btn-lg">Assigned Courses &raquo;</a></p>
+                        </th>
+
+                    </tr>
+                </thead>
+
+            </table>
+        }
+        @if (Request.IsAuthenticated && User.IsInRole("Trainer"))
+        {
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "TrainerTopics")'" class="btn btn-primary btn-lg">Assigned Topics &raquo;</a></p>
+                        </th>
+
+                    </tr>
+                </thead>
+
+            </table>
+        }
+        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+        {
+            <p><a onclick="window.location='@Url.Action("UsersWithRoles", "ManageUsers")'" class="btn btn-primary btn-lg">Manage Accounts &raquo;</a></p>
+
+        }
+        @if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
+        {
+            <table>
+                <thead>
+                    <tr>
+
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "Categories")'" class="btn btn-primary btn-lg">Manage Category &raquo;</a></p>
+                        </th>
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "Courses")'" class="btn btn-primary btn-lg">Manage Courses &raquo;</a></p>
+                        </th>
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "Topics")'" class="btn btn-primary btn-lg">Manage Topics &raquo;</a></p>
+                        </th>
+
+                    </tr>
+                </thead>
+
+            </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "ManagerStaffViewModels")'" class="btn btn-primary btn-lg">Manage Account &raquo;</a></p>
+                        </th>
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "TrainerTopics")'" class="btn btn-primary btn-lg">Assign Trainers To Topics &raquo;</a></p>
+                        </th>
+                        <th>
+                            <p><a onclick="window.location='@Url.Action("Index", "TraineeCourses")'" class="btn btn-primary btn-lg">Assign Trainee To Courses &raquo;</a></p>
+                        </th>
+                    </tr>
+                </thead>
+
+            </table>
+        }
+    </div>
+</div>

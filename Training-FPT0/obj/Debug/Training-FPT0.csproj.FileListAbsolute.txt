@@ -115,3 +115,4 @@ C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Debug\Training_FPT
 C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Debug\Training_FPT0.Migrations.UpdateData.resources
 C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Debug\Training_FPT0.Migrations.UD.resources
 C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Debug\Training_FPT0.Migrations.UPD.resources
+C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Debug\Training_FPT0.Migrations.UD1.resources

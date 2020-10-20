@@ -83,5 +83,60 @@ namespace Training_FPT0.Controllers
 
             return View(TrainerTopicVM);
         }
+        [HttpGet]
+        [Authorize(Roles = "TrainingStaff")]
+        public ActionResult Edit(int id)
+        {
+            var tcInDb = _context.TraineeCourses.SingleOrDefault(p => p.Id == id);
+            if (tcInDb == null)
+            {
+                return HttpNotFound();
+            }
+            var viewModel = new TraineeCourseViewModel
+            {
+                TraineeCourse = tcInDb,
+                Courses = _context.Courses.ToList(),
+
+            };
+
+            return View(viewModel);
+        }
+        [HttpPost]
+        [Authorize(Roles = "TrainingStaff")]
+        public ActionResult Edit(TraineeCourse traineeCourse)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var tcInDb = _context.TraineeCourses.SingleOrDefault(p => p.Id == traineeCourse.Id);
+            if (tcInDb == null)
+            {
+                return HttpNotFound();
+            }
+            tcInDb.CourseId = traineeCourse.CourseId;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "TrainingStaff")]
+        public ActionResult Delete(int id)
+        {
+            var traineecourseInDb = _context.TraineeCourses.SingleOrDefault(p => p.Id == id);
+
+            if (traineecourseInDb == null)
+            {
+                return HttpNotFound();
+            }
+            _context.TraineeCourses.Remove(traineecourseInDb);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+
+        }
     }
 }

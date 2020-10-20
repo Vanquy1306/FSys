@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2020-10-20T06:15:50.7071262Z"
+    }
+  },
+  "parameters": {
+    "mssql1.subscriptionId": {
+      "Type": "subscription",
+      "Value": "3dfa8f1e-429c-4009-8de0-9645416d2456"
+    },
+    "mssql1.resourceGroupName": {
+      "Type": "resourceGroup",
+      "Value": "DotNetAppSqlDb20201005113222ResourceGroup"
+    }
+  }
+}

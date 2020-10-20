@@ -30,5 +30,6 @@ namespace Training_FPT0.Models
             return new ApplicationDbContext();
         }
 
+
     }
 }

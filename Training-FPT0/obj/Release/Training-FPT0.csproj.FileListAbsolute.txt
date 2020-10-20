@@ -115,3 +115,4 @@ C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Release\Training-F
 C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Release\Training-FPT0.pdb
 C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Release\Training-FPT0.csprojAssemblyReference.cache
 C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Release\Training_FPT0.Migrations.UPD.resources
+C:\Users\Quy V.P\source\repos\Training-FPT0\Training-FPT0\obj\Release\Training_FPT0.Migrations.UD1.resources

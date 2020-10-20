@@ -21,6 +21,7 @@ namespace Training_FPT0.Controllers
 		{
 			var categories = _context.Categories.ToList();
 			return View(categories);
+
 		}
 
 		[HttpGet]

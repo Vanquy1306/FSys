@@ -140,5 +140,16 @@ namespace Training_FPT0.Controllers
 
 			return RedirectToAction("Index");
 		}
+		public ActionResult Details(int id)
+		{
+			var courseInDb = _context.Courses.SingleOrDefault(p => p.Id == id);
+
+			if (courseInDb == null)
+			{
+				return HttpNotFound();
+			}
+
+			return View(courseInDb);
+		}
 	}
 }

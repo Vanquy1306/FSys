@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,6 @@ using System.Web;
 using System.Web.Mvc;
 using Training_FPT0.Models;
 using Training_FPT0.ViewModels;
-using static Training_FPT0.Controllers.AccountController;
-using static Training_FPT0.Controllers.ManageController;
 
 namespace Training_FPT0.Controllers
 {
@@ -49,7 +48,7 @@ namespace Training_FPT0.Controllers
 
             return View(usersWithRoles);
         }
- 
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public ActionResult Edit(string id)
@@ -93,7 +92,7 @@ namespace Training_FPT0.Controllers
             return View(user);
         }
 
-            [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
               public ActionResult Delete(string id)
         {
             var userInDb = _context.Users.SingleOrDefault(p => p.Id == id);
@@ -107,6 +106,21 @@ namespace Training_FPT0.Controllers
 
                 return RedirectToAction("UsersWithRoles");
             
+        }
+        [Authorize(Roles = "Admin")]
+        public ActionResult ResetPass(ApplicationUser user)
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            userId = user.Id;
+            if (userId != null)
+            {
+                UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>());
+                userManager.RemovePassword(userId);
+                String newPassword = "A456456a@";
+                userManager.AddPassword(userId, newPassword);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("UsersWithRoles", "ManageUsers");
         }
     }
 }

@@ -110,5 +110,18 @@ namespace Training_FPT0.Controllers
 
 			return RedirectToAction("Index");
 		}
+		// GET: Topics/Details/5
+		public ActionResult Details(int id)
+		{
+			var topicInDb = _context.Topics.SingleOrDefault(p => p.Id == id);
+
+			if (topicInDb == null)
+			{
+				return HttpNotFound();
+			}
+
+			return View(topicInDb);
+		}
+	
 	}
 }
