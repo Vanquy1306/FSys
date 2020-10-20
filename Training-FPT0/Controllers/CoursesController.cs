@@ -57,12 +57,6 @@ namespace Training_FPT0.Controllers
 				return View();
 			}
 
-			if (_context.Courses.Any(p => p.Name.Contains(course.Name)))
-			{
-				ModelState.AddModelError("Name", "Course Name Already Exists.");
-				return View();
-			}
-
 			var newCourse = new Course
 			{
 				Name = course.Name,
