@@ -18,10 +18,6 @@ namespace Training_FPT0.Models
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
-        [Required]
-
-        public int TopicId { get; set; }
-        public Topic Topic { get; set; }
  
     }
 }

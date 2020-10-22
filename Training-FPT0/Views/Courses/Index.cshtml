@@ -9,11 +9,14 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 }
+<p>
+    Find by name: @Html.TextBox("SearchString")
+    <input type="submit" value="Search" />
+</p>
 <table class="table">
     <tr>
         <th>Name</th>
         <th>Category Name</th>
-        <th>Topics</th>
         <th>Delete</th>
         <th>Edit</th>
         <th>Details</th>
@@ -25,8 +28,6 @@
 <tr>
     <td>@course.Name</td>
     <td>@course.Category.Name</td>
-    <td>@course.Topic.Name</td>
-
     <td>
         @Html.ActionLink("Delete", "Delete", new { id = course.Id })
     </td>

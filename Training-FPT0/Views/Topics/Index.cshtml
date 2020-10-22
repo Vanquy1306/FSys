@@ -10,6 +10,7 @@
 <table class="table">
     <tr>
         <th>Name</th>
+        <th>Course Name</th>
         <th>Edit</th>
         <th>Delete</th>
         <th>Details</th>
@@ -20,6 +21,7 @@
     {
 <tr>
     <td>@topic.Name</td>
+    <td>@topic.Course.Name</td>
     <td>@Html.ActionLink("Edit", "Edit", new { id = topic.Id })</td>
     <td>@Html.ActionLink("Delete", "Delete", new { id = topic.Id })</td>
     <td>@Html.ActionLink("Details", "Details", new { id = topic.Id })</td>

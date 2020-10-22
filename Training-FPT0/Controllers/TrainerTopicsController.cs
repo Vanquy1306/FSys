@@ -13,129 +13,105 @@ namespace Training_FPT0.Controllers
 {
     public class TrainerTopicsController : Controller
     {
-        private ApplicationDbContext _context;
+		private ApplicationDbContext _context;
 
-        public TrainerTopicsController()
-        {
-            _context = new ApplicationDbContext();
-        }
+		public TrainerTopicsController()
+		{
+			_context = new ApplicationDbContext();
+		}
 
-        public ActionResult Index()
-        {
-            if (User.IsInRole("TrainingStaff"))
-            {
-                var trainertopics = _context.TrainerTopics.Include(t => t.Topic).Include(t => t.Trainer).ToList();
-                return View(trainertopics);
-            }
-            if (User.IsInRole("Trainer"))
-            {
-                var trainerId = User.Identity.GetUserId();
-                var Res = _context.TrainerTopics.Where(e => e.TrainerId == trainerId).Include(t => t.Topic).ToList();
-                return View(Res);
-            }
-            return View("Login");
-        }
+		[HttpGet]
+		// GET: TraineeToCourses
+		public ActionResult Index(string searchTrainer)
+		{
+			var trainertopics = _context.TrainerTopics
+								   .Include(tr => tr.Topic)
+								   .Include(tr => tr.Trainer);
 
-        public ActionResult Create()
-        {
-            //get trainer
-            var role = (from r in _context.Roles where r.Name.Contains("Trainer") select r).FirstOrDefault();
-            var users = _context.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(role.Id)).ToList();
+			if (!String.IsNullOrEmpty(searchTrainer))
+			{
+				trainertopics = trainertopics.Where(
+						s => s.Trainer.UserName.Contains(searchTrainer) ||
+						s.Trainer.Email.Contains(searchTrainer));
+			}
 
-            //get topic
-            var topics = _context.Topics.ToList();
+			return View(trainertopics);
+		}
 
-            var TrainerTopicVM = new TrainerTopicViewModel()
-            {
-                Topics = topics,
-                Trainers = users,
-                TrainerTopic = new TrainerTopic()
-            };
+		[HttpGet]
+		public ActionResult Create()
+		{
+			var viewModel = new TrainerTopicViewModel
+			{
+				Topics = _context.Topics.ToList(),
+				Trainers = _context.Users.ToList()
+			};
 
-            return View(TrainerTopicVM);
-        }
-
-        [HttpPost]
-        public ActionResult Create(TrainerTopicViewModel model)
-        {
-            //get trainer
-            var role = (from r in _context.Roles where r.Name.Contains("Trainer") select r).FirstOrDefault();
-            var users = _context.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(role.Id)).ToList();
-
-            //get topic
-            var topics = _context.Topics.ToList();
+			return View(viewModel);
+		}
 
 
-            if (ModelState.IsValid)
-            {
-                _context.TrainerTopics.Add(model.TrainerTopic);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
+		[HttpPost]
+		public ActionResult Create(TrainerTopic trainerTopic)
+		{
+			var newTrainerTopic = new TrainerTopic
+			{
+				TrainerId = trainerTopic.TrainerId,
+				TopicId = trainerTopic.TopicId
+			};
 
-            var TrainerTopicVM = new TrainerTopicViewModel()
-            {
-                Topics = topics,
-                Trainers = users,
-                TrainerTopic = new TrainerTopic()
-            };
+			_context.TrainerTopics.Add(newTrainerTopic);
+			_context.SaveChanges();
+			return RedirectToAction("Index");
+		}
 
-            return View(TrainerTopicVM);
-        }
-        [HttpGet]
-        [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Edit(int id)
-        {
-            var ttInDb = _context.TrainerTopics.SingleOrDefault(p => p.Id == id);
-            if (ttInDb == null)
-            {
-                return HttpNotFound();
-            }
-            var viewModel = new TrainerTopicViewModel
-            {
-                TrainerTopic = ttInDb,
-                Topics = _context.Topics.ToList(),
+		[HttpGet]
+		public ActionResult Delete(int id)
+		{
+			var trainerInDb = _context.TrainerTopics.SingleOrDefault(trainerinDb => trainerinDb.Id == id);
+			if (trainerInDb == null)
+			{
+				return HttpNotFound();
+			}
 
-            };
+			_context.TrainerTopics.Remove(trainerInDb);
+			_context.SaveChanges();
+			return RedirectToAction("Index");
+		}
 
-            return View(viewModel);
-        }
-        [HttpPost]
-        [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Edit(TrainerTopic trainerTopic)
-        {
+		[HttpGet]
+		public ActionResult Edit(int id)
+		{
+			var trainerInDb = _context.TrainerTopics.SingleOrDefault(trainerinDb => trainerinDb.Id == id);
 
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+			if (trainerInDb == null)
+			{
+				return HttpNotFound();
+			}
 
-            var ttInDb = _context.TrainerTopics.SingleOrDefault(p => p.Id == trainerTopic.Id);
-            if (ttInDb == null)
-            {
-                return HttpNotFound();
-            }
-            ttInDb.TopicId = trainerTopic.TopicId;
+			var viewModel = new TrainerTopicViewModel
+			{
+				TrainerTopic = trainerInDb,
+				Topics = _context.Topics.ToList(),
+			};
 
-                _context.SaveChanges();
+			return View(viewModel);
+		}
 
-                return RedirectToAction("Index", "TrainerTopics");
-            }
+		[HttpPost]
+		public ActionResult Edit(TrainerTopic trainerTopic)
+		{
+			var trainerInDb = _context.TrainerTopics.SingleOrDefault(trainerinDb => trainerinDb.Id == trainerTopic.Id);
 
-        [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Delete(int id)
-        {
-            var trainertopicInDb = _context.TrainerTopics.SingleOrDefault(p => p.Id == id);
+			if (trainerInDb == null)
+			{
+				return HttpNotFound();
+			}
 
-            if (trainertopicInDb == null)
-            {
-                return HttpNotFound();
-            }
-            _context.TrainerTopics.Remove(trainertopicInDb);
-            _context.SaveChanges();
+			trainerInDb.TopicId = trainerTopic.TopicId;
 
-            return RedirectToAction("Index", "TrainerTopics");
-
-        }
-    }
+			_context.SaveChanges();
+			return RedirectToAction("Index");
+		}
+	}
 }

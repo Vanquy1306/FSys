@@ -2,27 +2,20 @@
 @{ ViewBag.Title = "Edit"; }
 
 <h2>Edit</h2>
-
 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
 @using (Html.BeginForm("Edit", "TraineeCourses", FormMethod.Post))
 {
-@Html.HiddenFor(u => u.TraineeCourse.Id)
-                <div class="form-horizontal">
-                    <hr />
-                    <div class="form-group">
-                        @Html.LabelFor(p => p.TraineeCourse.Course.Name)
-                        @Html.DropDownListFor(p => p.TraineeCourse.CourseId,
-                                   new SelectList(Model.Courses, "Id", "Name"),
-                                   "Select Course Name",
-                                   new { @class = "form-control" })
-                    </div>
+    <div class="form-group">
+        @Html.LabelFor(tr => tr.TraineeCourse.Course.Name)
+        @Html.DropDownListFor(tr => tr.TraineeCourse.CourseId
+           , new SelectList(Model.Courses, "Id", "Name"),
+           "Select Course",
+           new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-primary">Edit</button>
+}
 
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Save" class="btn btn-default" />
-                        </div>
-                    </div>
-                </div>}
 
 <div>
     @Html.ActionLink("Back to List", "Index")

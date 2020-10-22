@@ -22,14 +22,13 @@ namespace Training_FPT0.Controllers
 		public ActionResult Index(string searchString)
 		{
 			var courses = _context.Courses
-			.Include(p => p.Category).Include(c => c.Topic);
+			.Include(p => p.Category);
 
 			if (!String.IsNullOrEmpty(searchString))
 			{
 				courses = courses.Where(
-					s => s.Name.Contains(searchString)||
-					s.Category.Name.Contains(searchString)||
-				    s.Topic.Name.Contains(searchString));
+					s => s.Name.Contains(searchString) ||
+					s.Category.Name.Contains(searchString));
 
 			}
 
@@ -43,7 +42,6 @@ namespace Training_FPT0.Controllers
 			var viewModel = new CourseCategoryViewModel
 			{
 				Categories = _context.Categories.ToList(),
-			    Topics = _context.Topics.ToList()
 			};
 			return View(viewModel);
 		}
@@ -61,7 +59,6 @@ namespace Training_FPT0.Controllers
 			{
 				Name = course.Name,
 				CategoryId = course.CategoryId,
-				TopicId = course.TopicId,
 			};
 
 			_context.Courses.Add(newCourse);
@@ -104,7 +101,6 @@ namespace Training_FPT0.Controllers
 			{
 				Course = courseInDb,
 				Categories = _context.Categories.ToList(),
-                Topics = _context.Topics.ToList()
 			};
 
 			return View(viewModel);
@@ -129,7 +125,6 @@ namespace Training_FPT0.Controllers
 
 			courseInDb.Name = course.Name;
 			courseInDb.CategoryId = course.CategoryId;
-			courseInDb.TopicId = course.TopicId;
 			_context.SaveChanges();
 
 			return RedirectToAction("Index");

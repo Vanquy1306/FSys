@@ -6,10 +6,9 @@ using Training_FPT0.Models;
 
 namespace Training_FPT0.ViewModels
 {
-    public class CourseCategoryViewModel
+    public class TopicCourseViewModel
     {
-        public Course Course { get; set; }
-        public IEnumerable<Category> Categories { get; set; }
-
+        public Topic Topic { get; set; }
+        public IEnumerable<Course> Courses { get; set; }
     }
 }

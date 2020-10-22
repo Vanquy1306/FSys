@@ -2,56 +2,52 @@
 
 @{ ViewBag.Title = "Assign Trainee to Course"; }
 
-<h2>Courses</h2>
-@if (User.IsInRole("TrainingStaff"))
+<h2>Manage Trainee</h2>
+
+@using (Html.BeginForm("Index", "TraineeCourses", FormMethod.Get))
 {
-<p>
+    <p>
+        <input type="search" placeholder="Enter Trainee Email or UserName"
+               name="searchTrainee" style="width:225px; height:33px;" />
+
+        <input type="submit" value="Search" class="btn btn-primary" />
+
+        @Html.ActionLink("View all Trainee", "Index", "TraineeCourses")
+    </p>
+}
+
+@if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
+{
     @Html.ActionLink("Assign Trainee to Course", "Create")
-</p>
-
-                <table class="table">
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Trainee)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Course)
-                        </th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-
-                    @foreach (var item in Model)
-                    {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Trainee.UserName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Course.Name)
-                    </td>
-                    <td>@Html.ActionLink("Edit", "Edit", new { id = item.Id })</td>
-                    <td>@Html.ActionLink("Delete", "Delete", new { id = item.Id })</td>
-                </tr>
 }
-                </table>
-}
-@if (User.IsInRole("Trainee"))
-{<table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(item => item.Course)
-            </th>
-            <th></th>
-        </tr>
-        @foreach (var item in Model)
+
+<table class="table table-striped">
+    <tr>
+        <th>Id</th>
+        <th>Trainee Email</th>
+        <th>Trainee UserName</th>
+        <th>Course Name</th>
+        @if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
         {
- <tr>
-     <td>
-         @Html.DisplayFor(modelItem => item.Course.Name)
-     </td>
- </tr>
-}
-    </table>}
+            <th>Edit</th>
+            <th>Delete</th>
+        }
+
+    </tr>
+    @foreach (var trainee in Model)
+    {
+        <tr>
+            <th>@trainee.Id</th>
+            <th>@trainee.Trainee.Email</th>
+            <th>@trainee.Trainee.UserName</th>
+            <th>@trainee.Course.Name</th>
+            @if (Request.IsAuthenticated && User.IsInRole("TrainingStaff"))
+            {
+                <th>@Html.ActionLink("Edit", "Edit", new { id = trainee.Id })</th>
+                <th>@Html.ActionLink("Delete", "Delete", new { id = trainee.Id })</th>
+            }
+        </tr>
+    }
+</table>
 @Html.ActionLink("Back to home", "Index", "Home")
 

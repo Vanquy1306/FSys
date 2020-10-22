@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Training_FPT0.Models;
+using Training_FPT0.ViewModels;
 
 namespace Training_FPT0.Controllers
 {
@@ -19,16 +20,27 @@ namespace Training_FPT0.Controllers
 		}
 		// GET: Course
 		[HttpGet]
-		public ActionResult Index()
+		public ActionResult Index(string searchString)
 		{
-			var topics = _context.Topics.ToList();
-			return View(topics);
+			var topics = _context.Topics.Include(p => p.Course);
+			if (!String.IsNullOrEmpty(searchString))
+			{
+				topics = topics.Where(
+					s => s.Name.Contains(searchString) ||
+					s.Course.Name.Contains(searchString));
+
+			}
+			return View(topics.ToList());
 		}
 
 		[HttpGet]
 		public ActionResult Create()
 		{
-			return View();
+			var viewModel = new TopicCourseViewModel
+			{
+				Courses = _context.Courses.ToList(),
+			};
+			return View(viewModel);
 		}
 
 		[HttpPost]
@@ -49,6 +61,7 @@ namespace Training_FPT0.Controllers
 			{
 				Name = topic.Name,
 				Description = topic.Description,
+				CourseId = topic.CourseId,
 
 
 			};
@@ -84,8 +97,12 @@ namespace Training_FPT0.Controllers
 			{
 				return HttpNotFound();
 			}
-
-			return View(topicInDb);
+			var viewModel = new TopicCourseViewModel
+			{
+				Topic = topicInDb,
+				Courses = _context.Courses.ToList(),
+			};
+			return View(viewModel);
 		}
 
 		[HttpPost]
@@ -105,6 +122,8 @@ namespace Training_FPT0.Controllers
 
 			topicInDb.Name = topicInDb.Name;
 			topicInDb.Description = topicInDb.Description;
+			topicInDb.CourseId = topicInDb.CourseId;
+
 
 			_context.SaveChanges();
 

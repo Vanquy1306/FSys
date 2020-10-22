@@ -17,9 +17,10 @@ namespace Training_FPT0.Controllers
 		}
 		// GET: Course
 		[HttpGet]
-		public ActionResult Index()
+		public ActionResult Index(string searchString)
 		{
 			var categories = _context.Categories.ToList();
+
 			return View(categories);
 
 		}

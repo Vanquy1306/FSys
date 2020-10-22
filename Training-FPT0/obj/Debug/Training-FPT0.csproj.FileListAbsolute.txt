@@ -234,3 +234,4 @@ C:\Users\84906\Source\Repos\FSys\Training-FPT0\obj\Debug\Training-FPT0.csproj.Co
 C:\Users\84906\Source\Repos\FSys\Training-FPT0\obj\Debug\Training-FPT0.csproj.CopyComplete
 C:\Users\84906\Source\Repos\FSys\Training-FPT0\obj\Debug\Training-FPT0.dll
 C:\Users\84906\Source\Repos\FSys\Training-FPT0\obj\Debug\Training-FPT0.pdb
+C:\Users\84906\Source\Repos\FSys\Training-FPT0\obj\Debug\Training_FPT0.Migrations.UpdateCode.resources

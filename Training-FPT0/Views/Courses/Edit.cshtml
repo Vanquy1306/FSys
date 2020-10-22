@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit Staff</h2>
+<h2>Edit Course</h2>
 
 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
@@ -23,13 +23,7 @@
          "Select Category Name",
          new { @class = "form-control" })
     </div>
-    <div class="form-group">
-        @Html.LabelFor(p => p.Course.Topic.Name)
-        @Html.DropDownListFor(p => p.Course.TopicId,
-         new SelectList(Model.Topics, "Id", "Name"),
-         "Select Topic Name",
-         new { @class = "form-control" })
-    </div>
+    
     <button type="submit" class="btn btn-primary">Edit</button>
 }
 @Html.ActionLink("Back to Index", "Index")

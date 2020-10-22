@@ -224,6 +224,10 @@
     <Compile Include="Migrations\202010190830472_UD1.Designer.cs">
       <DependentUpon>202010190830472_UD1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010220323495_UpdateCode.cs" />
+    <Compile Include="Migrations\202010220323495_UpdateCode.designer.cs">
+      <DependentUpon>202010220323495_UpdateCode.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -241,6 +245,7 @@
     <Compile Include="ViewModels\CourseCategoryViewModel.cs" />
     <Compile Include="ViewModels\ManagerStaffViewModel.cs" />
     <Compile Include="Models\TraineeCourse.cs" />
+    <Compile Include="ViewModels\TopicCourseViewModel.cs" />
     <Compile Include="ViewModels\TraineeCourseViewModel.cs" />
     <Compile Include="ViewModels\TrainerTopicViewModel.cs" />
     <Compile Include="ViewModels\Users_In_Role.cs" />
@@ -370,6 +375,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010190830472_UD1.resx">
       <DependentUpon>202010190830472_UD1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010220323495_UpdateCode.resx">
+      <DependentUpon>202010220323495_UpdateCode.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

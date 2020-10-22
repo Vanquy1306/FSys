@@ -12,131 +12,105 @@ namespace Training_FPT0.Controllers
 {
     public class TraineeCoursesController : Controller
     {
-        private ApplicationDbContext _context;
 
-        public TraineeCoursesController()
-        {
-            _context = new ApplicationDbContext();
-        }
+		private ApplicationDbContext _context;
+		public TraineeCoursesController()
+		{
+			_context = new ApplicationDbContext();
+		}
 
-        public ActionResult Index()
-        {
-            if (User.IsInRole("TrainingStaff"))
-            {
-                var traineecourses = _context.TraineeCourses.Include(t => t.Course).Include(t => t.Trainee).ToList();
-                return View(traineecourses);
-            }
-            if (User.IsInRole("Trainee"))
-            {
-                var traineeId = User.Identity.GetUserId();
-                var Res = _context.TraineeCourses.Where(e => e.TraineeId == traineeId).Include(t => t.Course).ToList();
-                return View(Res);
-            }
-            return View("Login");
-        }
+		[HttpGet]
+		// GET: TraineeToCourses
+		public ActionResult Index(string searchTrainee)
+		{
+			var traineecourses = _context.TraineeCourses
+								   .Include(tr => tr.Course)
+								   .Include(tr => tr.Trainee);
 
-        public ActionResult Create()
-        {
-            //get trainer
-            var role = (from r in _context.Roles where r.Name.Contains("Trainee") select r).FirstOrDefault();
-            var users = _context.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(role.Id)).ToList();
+			if (!String.IsNullOrEmpty(searchTrainee))
+			{
+				traineecourses = traineecourses.Where(
+						s => s.Trainee.UserName.Contains(searchTrainee) ||
+						s.Trainee.Email.Contains(searchTrainee));
+			}
 
-            //get topic
+			return View(traineecourses);
+		}
 
-            var courses = _context.Courses.ToList();
+		[HttpGet]
+		public ActionResult Create()
+		{
+			var viewModel = new TraineeCourseViewModel
+			{
+				Courses = _context.Courses.ToList(),
+				Trainees = _context.Users.ToList()
+			};
 
-            var TrainerTopicVM = new TraineeCourseViewModel()
-            {
-                Courses = courses,
-                Trainees = users,
-                TraineeCourse = new TraineeCourse()
-            };
-
-            return View(TrainerTopicVM);
-        }
-
-        [HttpPost]
-        public ActionResult Create(TraineeCourseViewModel model)
-        {
-            //get trainer
-            var role = (from r in _context.Roles where r.Name.Contains("Trainee") select r).FirstOrDefault();
-            var users = _context.Users.Where(x => x.Roles.Select(y => y.RoleId).Contains(role.Id)).ToList();
-
-            //get topic
-
-            var courses = _context.Courses.ToList();
+			return View(viewModel);
+		}
 
 
-            if (ModelState.IsValid)
-            {
-                _context.TraineeCourses.Add(model.TraineeCourse);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
+		[HttpPost]
+		public ActionResult Create(TraineeCourse traineeCourse)
+		{
+			var newTraineeCourse = new TraineeCourse
+			{
+				TraineeId = traineeCourse.TraineeId,
+				CourseId = traineeCourse.CourseId
+			};
 
-            var TrainerTopicVM = new TraineeCourseViewModel()
-            {
-                Courses = courses,
-                Trainees = users,
-                TraineeCourse = new TraineeCourse()
-            };
+			_context.TraineeCourses.Add(newTraineeCourse);
+			_context.SaveChanges();
+			return RedirectToAction("Index");
+		}
 
-            return View(TrainerTopicVM);
-        }
-        [HttpGet]
-        [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Edit(int id)
-        {
-            var tcInDb = _context.TraineeCourses.SingleOrDefault(p => p.Id == id);
-            if (tcInDb == null)
-            {
-                return HttpNotFound();
-            }
-            var viewModel = new TraineeCourseViewModel
-            {
-                TraineeCourse = tcInDb,
-                Courses = _context.Courses.ToList(),
+		[HttpGet]
+		public ActionResult Delete(int id)
+		{
+			var traineeInDb = _context.TraineeCourses.SingleOrDefault(traineeindb => traineeindb.Id == id);
+			if (traineeInDb == null)
+			{
+				return HttpNotFound();
+			}
 
-            };
+			_context.TraineeCourses.Remove(traineeInDb);
+			_context.SaveChanges();
+			return RedirectToAction("Index");
+		}
 
-            return View(viewModel);
-        }
-        [HttpPost]
-        [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Edit(TraineeCourse traineeCourse)
-        {
+		[HttpGet]
+		public ActionResult Edit(int id)
+		{
+			var traineeInDb = _context.TraineeCourses.SingleOrDefault(traineeindb => traineeindb.Id == id);
 
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+			if (traineeInDb == null)
+			{
+				return HttpNotFound();
+			}
 
-            var tcInDb = _context.TraineeCourses.SingleOrDefault(p => p.Id == traineeCourse.Id);
-            if (tcInDb == null)
-            {
-                return HttpNotFound();
-            }
-            tcInDb.CourseId = traineeCourse.CourseId;
+			var viewModel = new TraineeCourseViewModel
+			{
+				TraineeCourse = traineeInDb,
+				Courses = _context.Courses.ToList(),
+			};
 
-            _context.SaveChanges();
+			return View(viewModel);
+		}
 
-            return RedirectToAction("Index");
-        }
+		[HttpPost]
+		public ActionResult Edit(TraineeCourse traineeCourse)
+		{
+			var traineeInDb = _context.TraineeCourses.SingleOrDefault(traineeindb => traineeindb.Id == traineeCourse.Id);
 
-        [Authorize(Roles = "TrainingStaff")]
-        public ActionResult Delete(int id)
-        {
-            var traineecourseInDb = _context.TraineeCourses.SingleOrDefault(p => p.Id == id);
+			if (traineeInDb == null)
+			{
+				return HttpNotFound();
+			}
 
-            if (traineecourseInDb == null)
-            {
-                return HttpNotFound();
-            }
-            _context.TraineeCourses.Remove(traineecourseInDb);
-            _context.SaveChanges();
+			traineeInDb.CourseId = traineeCourse.CourseId;
 
-            return RedirectToAction("Index");
-
-        }
-    }
+			_context.SaveChanges();
+			return RedirectToAction("Index");
+		}
+	}
 }

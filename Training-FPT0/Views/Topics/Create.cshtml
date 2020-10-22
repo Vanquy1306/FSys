@@ -1,31 +1,27 @@
-﻿@model Training_FPT0.Models.Topic
+﻿@model Training_FPT0.ViewModels.TopicCourseViewModel
 
 @{
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
-@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<h2>Create a new Topic</h2>
+
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
 @using (Html.BeginForm("Create", "Topics", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
     <div class="form-group">
-        @Html.LabelFor(t => t.Name)
-        @Html.TextBoxFor(t => t.Name, new { @class = "form-control" })
-        @Html.ValidationMessageFor(t => t.Name, "", new { @class = "text-danger" })
+        @Html.LabelFor(p => p.Topic.Name)
+        @Html.TextBoxFor(p => p.Topic.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Topic.Name, "", new { @class = "text-danger" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(t => t.Description)
-        @Html.TextBoxFor(t => t.Description, new { @class = "form-control" })
-        @Html.ValidationMessageFor(t => t.Description, "", new { @class = "text-danger" })
+        @Html.LabelFor(p => p.Topic.Course.Name)
+        @Html.DropDownListFor(p => p.Topic.CourseId,
+         new SelectList(Model.Courses, "Id", "Name"),
+         "Select Course Name",
+         new { @class = "form-control" })
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
 }
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
+@Html.ActionLink("Back to Index", "Index")
