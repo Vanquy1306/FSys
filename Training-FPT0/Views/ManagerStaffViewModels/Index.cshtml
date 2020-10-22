@@ -15,17 +15,22 @@
                 <th>Role</th>
                 <th>Edit</th>
                 <th>Delete</th>
+                <th>ResetPass</th>
+
+
             </tr>
         </thead>
         @foreach (var user in Model.Trainee)
         {
-<tr>
-    <td>@user.UserName </td>
-    <td> @user.Email</td>
-    <td> @user.RoleName</td>
-    <td>@Html.ActionLink("Edit", "Edit", new { id = user.UserId })</td>
-    <td>@Html.ActionLink("Delete", "Delete", new { id = user.UserId })</td>
-</tr>
+    <tr>
+        <td>@user.UserName </td>
+        <td> @user.Email</td>
+        <td> @user.RoleName</td>
+        <td>@Html.ActionLink("Edit", "Edit", new { id = user.UserId })</td>
+        <td>@Html.ActionLink("Delete", "Delete", new { id = user.UserId })</td>
+        <td>@Html.ActionLink("ResetPass", "ResetPass", new { id = user.UserId })</td>
+
+    </tr>
 }
     </table>
 </div>

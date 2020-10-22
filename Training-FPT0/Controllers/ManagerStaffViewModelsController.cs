@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
@@ -104,6 +106,21 @@ namespace Training_FPT0.Controllers
 
             return RedirectToAction("Index", "ManagerStaffViewModels");
 
+        }
+        [Authorize(Roles = "TrainingStaff")]
+        public ActionResult ResetPass(ApplicationUser user)
+        {
+            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+            userId = user.Id;
+            if (userId != null)
+            {
+                UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>());
+                userManager.RemovePassword(userId);
+                String newPassword = "A456456a@";
+                userManager.AddPassword(userId, newPassword);
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
